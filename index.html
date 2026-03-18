@@ -1,1 +1,659 @@
-<h1> Customer Retention for Ecommerce Brands </h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tieralist — E-Commerce Retention Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #0b0b0e;
+      --bg2: #131318;
+      --bg3: #1a1a22;
+      --accent: #c8f542;
+      --accent-dim: rgba(200, 245, 66, 0.12);
+      --text: #f0ece4;
+      --muted: #7a7875;
+      --border: rgba(240, 236, 228, 0.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 3rem;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      background: rgba(11, 11, 14, 0.8);
+    }
+
+    .nav-logo {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--accent); }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: var(--bg);
+      padding: 0.55rem 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: opacity 0.2s;
+    }
+
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      right: -200px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(200,245,66,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-left { max-width: 580px; }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(200,245,66,0.3);
+      padding: 0.3rem 0.8rem;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero-headline {
+      font-family: 'Bodoni Moda', serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s ease 0.1s both;
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 420px;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.6s ease 0.2s both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      animation: fadeUp 0.6s ease 0.3s both;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+      padding: 0.9rem 2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: #d4ff55;
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      transition: color 0.2s;
+    }
+
+    .btn-ghost:hover { color: var(--text); }
+
+    /* hero right — stats column */
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding-left: 4rem;
+      border-left: 1px solid var(--border);
+      animation: fadeUp 0.6s ease 0.4s both;
+    }
+
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--accent);
+    }
+
+    .stat-num {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      padding: 6rem 3rem;
+      position: relative;
+    }
+
+    .section-tag {
+      font-size: 0.68rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Bodoni Moda', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.8;
+      max-width: 480px;
+    }
+
+    /* ── PROBLEM ── */
+    .problem {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-top: 3rem;
+    }
+
+    .problem-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .problem-list li {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .problem-list li::before {
+      content: '—';
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 0.05em;
+    }
+
+    /* ── PROCESS ── */
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      margin-top: 3rem;
+      border: 1px solid var(--border);
+    }
+
+    .step {
+      background: var(--bg);
+      padding: 2rem 1.5rem;
+      position: relative;
+      transition: background 0.25s;
+    }
+
+    .step:hover { background: var(--bg2); }
+
+    .step-num {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--bg3);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .step-title {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+
+    .step-label {
+      display: inline-block;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 0.2rem 0.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .step-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── WHO ── */
+    .who { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    .who-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .who-card {
+      border: 1px solid var(--border);
+      padding: 1.8rem;
+      background: var(--bg);
+      transition: border-color 0.25s;
+    }
+
+    .who-card:hover { border-color: rgba(200,245,66,0.3); }
+
+    .who-icon {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .who-card h3 {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .who-card p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center;
+      padding: 8rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(200,245,66,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-section .section-title {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      max-width: 700px;
+      margin: 1rem auto 1.5rem;
+    }
+
+    .cta-section .section-sub {
+      max-width: 420px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .email-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.9rem;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid rgba(200,245,66,0.3);
+      padding: 1rem 2rem;
+      letter-spacing: 0.08em;
+      transition: all 0.2s;
+      margin-bottom: 1rem;
+    }
+
+    .email-link:hover {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+    }
+
+    .email-hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .footer-logo span { color: var(--accent); }
+
+    .footer-copy {
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 0;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; }
+      .hero::after { display: none; }
+      .hero-right { padding-left: 0; border-left: none; border-top: 1px solid var(--border); padding-top: 2rem; flex-direction: row; flex-wrap: wrap; }
+      .stat-card { flex: 1; min-width: 140px; }
+      section { padding: 4rem 1.5rem; }
+      .problem-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .who-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 0.75rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Tier<span>a</span>list</a>
+    <a href="mailto:hello@tieralist.com" class="nav-cta">Get Free Audit →</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">E-Commerce Retention Analytics</div>
+      <h1 class="hero-headline">
+        Your customers<br />
+        are leaving.<br />
+        <em>We know why.</em>
+      </h1>
+      <p class="hero-sub">
+        Tieralist turns your raw transaction data into a retention engine — RFM segmentation, lifetime value modelling, and Klaviyo execution that keeps your best customers buying.
+      </p>
+      <div class="hero-actions">
+        <a href="mailto:hello@tieralist.com" class="btn-primary">Start with a Free Audit</a>
+        <a href="#process" class="btn-ghost">See how it works</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="stat-card">
+        <div class="stat-num">5×</div>
+        <div class="stat-label">Cost of acquiring vs. retaining a customer</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">65%</div>
+        <div class="stat-label">Of revenue comes from existing customers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">1%</div>
+        <div class="stat-label">Increase in retention → up to 7% profit increase</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="problem reveal">
+    <div class="section-tag">The Problem</div>
+    <div class="section-title">Most e-commerce brands<br />are flying blind.</div>
+    <div class="problem-grid">
+      <ul class="problem-list">
+        <li>Sending the same email to every customer, regardless of behavior</li>
+        <li>No idea which customers are about to churn — until they already have</li>
+        <li>High acquisition spend masking a leaky retention bucket</li>
+        <li>Klaviyo flows set up once, never optimized against real segment data</li>
+        <li>Average order value and LTV tracked as vanity metrics, not decision inputs</li>
+      </ul>
+      <div>
+        <p class="section-sub">
+          The brands winning on retention aren't spending more on ads — they know exactly who their customers are, what they're worth, and how to talk to them at the right moment.
+          <br /><br />
+          That's the gap Tieralist closes.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process" class="reveal">
+    <div class="section-tag">How It Works</div>
+    <div class="section-title">Four steps from data<br />to revenue.</div>
+    <div class="process-steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-label">Free</div>
+        <div class="step-title">Retention Audit</div>
+        <p class="step-desc">We analyze your customer data and show potential gaps in your customer list</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-label">Strategy</div>
+        <div class="step-title">Segment Strategy</div>
+        <p class="step-desc">Customer segmentation maps your customer base into different tiers. Each segment with its personalized retention strategt</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-label">Execution</div>
+        <div class="step-title">Klaviyo Build-Out</div>
+        <p class="step-desc">We translate the strategy directly into Klaviyo to build out flows, segments, and campaign sequences around your actual customer behavior.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-label">Ongoing</div>
+        <div class="step-title">Retention Reporting</div>
+        <p class="step-desc">Ongoing tracking of CLV movement, segment changed, and campaign ROI so performance is always visible and improving.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO -->
+  <section class="who reveal">
+    <div class="section-tag">Who We Work With</div>
+    <div class="section-title">Built for DTC brands<br />with repeat-purchase products.</div>
+    <div class="who-grid">
+      <div class="who-card">
+        <h3>Supplements</h3>
+        <p>High-frequency repurchase products where LTV modeling and reorder timing directly impact revenue predictability.</p>
+      </div>
+      <div class="who-card">
+        
+        <h3>Beauty & Skincare</h3>
+        <p>Loyalty-driven categories where personalized segment messaging turns one-time buyers into brand advocates.</p>
+      </div>
+      <div class="who-card">
+        
+        <h3>Pet Products</h3>
+        <p>Emotionally invested customers with strong repeat potential if you know how to engage them at the right moment.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section reveal">
+    <div class="section-tag">Get Started</div>
+    <h2 class="section-title">Ready to see what<br /><em>your</em> data says?</h2>
+    <p class="section-sub">The audit is free. Send us a message and we'll get back to you within 24 hours.</p>
+    <div>
+      <a href="mailto:dalo@tieralist.com" class="email-link">
+        <span>→</span>
+        dalo@tieralist.com
+      </a>
+      <p class="email-hint">FREE AUDIT · NO OBLIGATION · 24HR RESPONSE</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Tier<span>a</span>list</div>
+    <div class="footer-copy">© 2026 Tieralist. E-Commerce Customer Retention</div>
+  </footer>
+
+  <script>
+    // scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
