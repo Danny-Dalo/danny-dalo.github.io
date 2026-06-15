@@ -8,112 +8,162 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
 <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      display: flex;
+      justify-content: center;
+      padding: 3rem 1.25rem;
+    }
+
+    .wrapper {
+      max-width: 960px;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 0.4rem;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
+    /* stats */
+    .stats {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+    .stat {
+      flex: 1;
+      text-align: center;
+      padding: 0.85rem 0.5rem;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+    }
+    .stat-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    .stat-label {
+      font-size: 0.7rem;
+      color: #777;
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    /* video */
+    .video-wrap {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #e5e5e5;
+      margin-bottom: 1.75rem;
+    }
+    .video-wrap video {
+      display: block;
+      width: 100%;
+      background: #000;
+    }
+
+    /* steps */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #333;
+    }
+    .step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #f0f0f0;
       display: flex;
       align-items: center;
       justify-content: center;
-      /* Switched to a white background */
-      background: #ffffff;
-      /* Switched text color to dark for contrast */
-      color: #0f172a; 
-      /* Applied the Outfit font for a more luxurious modern feel */
-      font-family: 'Outfit', sans-serif;
-      text-align: center;
-      padding: 24px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #555;
+      flex-shrink: 0;
+      margin-top: 1px;
     }
-    .container {
-      max-width: 600px;
-    }
-    h1 {
-      font-family: 'Fraunces', serif;
-      font-size: 4rem;
-      margin-bottom: 16px;
-      letter-spacing: -2px;
-    }
-    p {
-      font-size: 1.2rem;
-      color: #64748b;
-      margin-bottom: 32px;
-      line-height: 1.6;
-    }
-    
-    /* Fancy Liquid Glass Badge */
-    .badge {
-      position: relative;
-      display: inline-block;
-      padding: 12px 28px;
-      font-size: 0.95rem;
-      font-weight: 500;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: #334155;
-      
-      /* Subtle transparent background gradient */
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 244, 248, 0.4) 100%);
-      
-      /* Glassmorphism blur */
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      
-      /* Border and Pill Shape */
-      border: 1px solid rgba(226, 232, 240, 0.8);
-      border-radius: 999px;
-      
-      /* Shadows to create 3D liquid depth and luxury feel */
-      box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.04),         /* Soft drop shadow */
-        inset 0 2px 4px rgba(255, 255, 255, 1), /* Top inner highlight */
-        inset 0 -2px 6px rgba(0, 0, 0, 0.03);   /* Bottom inner shadow */
-      
-      overflow: hidden;
-      cursor: default;
+    .step strong { font-weight: 600; color: #1a1a1a; }
+
+    .footer-note {
+      font-size: 0.75rem;
+      color: #999;
     }
 
-    /* Animated liquid shine reflection */
-    .badge::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -150%;
-      width: 50%;
-      height: 100%;
-      background: linear-gradient(
-        to right, 
-        rgba(255, 255, 255, 0) 0%, 
-        rgba(255, 255, 255, 0.8) 50%, 
-        rgba(255, 255, 255, 0) 100%
-      );
-      transform: skewX(-25deg);
-      animation: liquid-shine 4s infinite ease-in-out;
-    }
-
-    @keyframes liquid-shine {
-      0% { left: -150%; }
-      15% { left: 200%; }
-      100% { left: 200%; }
-    }
-
-    @media (max-width: 640px) {
-      h1 {
-        font-size: 2.5rem;
-      }
-      p {
-        font-size: 1rem;
-      }
+    @media (max-width: 480px) {
+      .stats { flex-direction: column; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="badge">
-      Building
+
+  <div class="wrapper">
+
+    <h1>Respond in seconds, not hours.</h1>
+    <p class="subtitle">
+      The first agent to respond keeps the new lead. Make sure that's you.
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">78%</div>
+        <div class="stat-label">of deals go to<br>the first responder</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">5 min</div>
+        <div class="stat-label">after 5 min, contact<br>rate drops 80%</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">15+ hours</div>
+        <div class="stat-label">average agent<br>response time</div>
+      </div>
     </div>
+
+    <div class="video-wrap">
+      <video controls preload="metadata">
+        <source src="demos/whatsapp lead response agent.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><strong>Lead reaches out</strong> in this case, through property finder</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><strong>Agent reads the listing details</strong> and gets sender's information and conversation notes</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><strong>Saves everything to any CRM</strong> and responds instantly to warm up the lead until you pick up.</div>
+      </div>
+    </div>
+
+    <p class="footer-note">Watch the video above for the full walkthrough.</p>
+
   </div>
+
 </body>
 </html>
